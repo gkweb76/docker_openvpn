@@ -1,0 +1,31 @@
+# Title : Compose file to setup an OpenVPN container 
+# Command : sudo docker-compose -f compose-vpn.yml -p <project_name> up
+version: "3.5"
+
+services:
+  openvpn:
+    image: gkweb76/openvpn:latest
+    container_name: openvpn
+    read_only: yes
+    networks:
+      - openvpn       
+    cap_add: # add capabilities
+      - NET_ADMIN
+    devices: # create /dev/net/tun inside container
+      - /dev/net/tun
+    sysctls: # update container /etc/sysctl.conf
+      net.ipv4.ip_forward: 1 # required if running as a client on a home gateway for instance
+    volumes:
+      - openvpn:/etc/openvpn # stored as /var/lib/docker/volumes/<project_name>_openvpn
+      - /etc/localtime:/etc/localtime:ro # keep container clock in sync with host
+    tmpfs:
+      - /tmp
+    restart: "unless-stopped"
+
+# Networks declaration
+networks:
+  openvpn:
+
+# Volumes declaration
+volumes:
+  openvpn:
