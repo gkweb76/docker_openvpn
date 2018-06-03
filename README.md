@@ -57,7 +57,7 @@ Finally start your container:
   
 `services:`  
 &nbsp;&nbsp;  `openvpn:`  
-&nbsp;&nbsp;  `image: gkweb76/openvpn:2.4.4`  
+&nbsp;&nbsp;  `image: gkweb76/openvpn:latest`  
 &nbsp;&nbsp;  `container_name: openvpn`  
 &nbsp;&nbsp;  `read_only: yes`  
 &nbsp;&nbsp;  `networks:`  
