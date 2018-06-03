@@ -91,3 +91,5 @@ If you need help with your compose file, check the official [documentation](http
 [Ubuntu](https://www.ubuntu.com/) 18.04 LTS and Docker 18.04.0 CE (Community Edition).
 
 # License
+
+MIT License
