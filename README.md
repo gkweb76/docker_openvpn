@@ -30,16 +30,16 @@ Github: [gkweb76](https://github.com/gkweb76/)
 First create your _openvpn_ volume:  
 `docker volume create openvpn`  
 `docker volume inspect openvpn | grep Mount`  
-Grab the host real path, for instance /var/lib/docker/volumes/openvpn/_data (referred as 'ovpn_volume_path' below)
+Grab the host real path, for instance /var/lib/docker/volumes/openvpn/_data (referred as '$OVPN_VOLUME_PATH' below)
 
 Then copy your files there, using the correct path:  
-`cp ./openvpn.conf ovpn_volume_path`  
-`cp ./auth.conf ovpn_volume_path`  
+`cp ./openvpn.conf $OVPN_VOLUME_PATH`  
+`cp ./auth.conf $OVPN_VOLUME_PATH`  
 ... and any other files you may require.  
 
 Apply a strict chmod so that only root can modify these files:  
-`chmod 644 ovpn_volume_path/openvpn.conf`  
-`chmod 644 ovpn_volume_path/auth.conf`  
+`chmod 644 $OVPN_VOLUME_PATH/openvpn.conf`  
+`chmod 644 $OVPN_VOLUME_PATH/auth.conf`  
 
 Finally start your container:  
 -   **as a client**  
@@ -85,10 +85,23 @@ Finally start your container:
     
 If you need help with your compose file, check the official [documentation](https://docs.docker.com/compose/compose-file/).  
 
+# On a home VPN gateway (router)
+When the router is a client from an external VPN server, and is forwarding traffic from the LAN to the VPN tunnel, you may want to add in your `openvpn.conf` file the following lines:  
+`script-security 2` 
+`up /etc/openvpn/init.sh`  
+
+Then inside `init.sh` you can write the following to NAT outbound traffic, and to send back the traffic to the LAN. Replace `$LAN_NET` by your LAN network and `$OVPN_GW` by your openvpn container network gateway (e.g 172.19.0.1):  
+`#!bin/ash`  
+`iptables -t nat -D POSTROUTING -o tun0 -j MASQUERADE` 
+`ip route del $LAN_NET via $OVPN_GW dev eth0` 
+`iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE` 
+`ip route add $LAN_NET via $OVPN_GW dev eth0` 
+
 
 # Tested on
 
-[Ubuntu](https://www.ubuntu.com/) 18.04 LTS and Docker 18.04.0 CE (Community Edition).
+[Ubuntu](https://www.ubuntu.com/) 18.04 LTS and Docker 18.04.0 CE (Community Edition), with ProtonVPN
+![](https://protonvpn.com/assets/img/media/protonvpn-logo-grey.png)
 
 # License
 
