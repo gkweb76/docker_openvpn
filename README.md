@@ -43,6 +43,7 @@ Apply a strict chmod so that only root can modify these files:
 
 Finally start your container:  
 -   **as a client**  
+sysctl command line option only required on a router  
 `docker container run --rm -v openvpn:/etc/openvpn --cap-add=NET_ADMIN \`  
 `--device /dev/net/tun --read-only=true --tmpfs /tmp --name openvpn \`  
 `--sysctl net.ipv4.ip_forward=1 gkweb76/openvpn`  
