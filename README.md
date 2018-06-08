@@ -44,12 +44,13 @@ Apply a strict chmod so that only root can modify these files:
 Finally start your container:  
 -   **as a client**  
 `docker container run --rm -v openvpn:/etc/openvpn --cap-add=NET_ADMIN \`  
-`--device /dev/net/tun --read-only=true --tmpfs /tmp --name openvpn gkweb76/openvpn`  
+`--device /dev/net/tun --read-only=true --tmpfs /tmp --name openvpn \`
+`--sysctl net.ipv4.ip_forward=1 gkweb76/openvpn`  
 
 -   **as a server**  
 `docker container run --rm -v openvpn:/etc/openvpn --cap-add=NET_ADMIN \`  
 `-p 1194:1194/udp --device /dev/net/tun --read-only=true --tmpfs /tmp \`  
-`--sysctl net.ipv4.ip_forward=1 --name openvpn gkweb76/openvpn`  
+`--name openvpn gkweb76/openvpn`  
 
 
 # Docker compose example  
