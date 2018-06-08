@@ -49,7 +49,7 @@ Finally start your container:
 -   **as a server**  
 `docker container run --rm -v openvpn:/etc/openvpn --cap-add=NET_ADMIN \`  
 `-p 1194:1194/udp --device /dev/net/tun --read-only=true --tmpfs /tmp \`  
-`--name openvpn gkweb76/openvpn`  
+`--sysctl net.ipv4.ip_forward=1 --name openvpn gkweb76/openvpn`  
 
 
 # Docker compose example  
